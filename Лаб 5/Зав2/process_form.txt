@@ -1,0 +1,33 @@
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = isset($_POST['name']) ? $_POST['name'] : '';
+    $email = isset($_POST['email']) ? $_POST['email'] : '';
+    $message = isset($_POST['message']) ? $_POST['message'] : '';
+
+    if (empty($name) || empty($email) || empty($message)) {
+        die('Будь ласка, заповніть всі обов'язкові поля.');
+    }
+
+    // Перевірка на валідну електронну адресу
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        die('Введіть правильну електронну адресу.');
+    }
+
+    $uploadedFile = $_FILES['file'];
+
+    if ($uploadedFile['error'] === UPLOAD_ERR_OK) {
+        $fileName = $uploadedFile['name'];
+        $fileSize = $uploadedFile['size'];
+        $fileType = $uploadedFile['type'];
+
+        echo "Ім'я: $name<br>";
+        echo "Email: $email<br>";
+        echo "Повідомлення: $message<br>";
+        echo "Завантажений файл: $fileName<br>";
+        echo "Розмір файлу: $fileSize байт<br>";
+        echo "Тип файлу: $fileType<br>";
+    } else {
+        echo "Помилка завантаження файлу. Спробуйте ще раз.";
+    }
+}
+?>

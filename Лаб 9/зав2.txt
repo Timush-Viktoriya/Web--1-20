@@ -1,0 +1,40 @@
+2.Виконайте сфмостійне завдання 2:
+Реалізуйте стовпчату діаграму із попереднього завдання за допомогою векторного формату SVG
+
+<?php
+// Дані для стовпчатої діаграми
+$data = [
+    ['Група' => 'A', 'ПІП' => 'Іванов', 'Дата' => '2023-10-25'],
+    ['Група' => 'B', 'ПІП' => 'Петров', 'Дата' => '2023-10-26'],
+    ['Група' => 'C', 'ПІП' => 'Сидоров', 'Дата' => '2023-10-27'],
+    // Додайте більше записів за потреби
+];
+
+// Розміри SVG-зображення
+$svgWidth = 400;
+$svgHeight = 300;
+
+// Розміри та відстані для стовпців
+$barWidth = 40;
+$barSpacing = 20;
+$chartX = 50;
+$chartY = 250;
+
+// Створення SVG-зображення
+header('Content-Type: image/svg+xml');
+echo '<?xml version="1.0" encoding="UTF-8"?>';
+echo "<svg width=\"$svgWidth\" height=\"$svgHeight\" xmlns=\"http://www.w3.org/2000/svg\">";
+
+// Побудова стовпців на основі даних
+$barX = $chartX;
+foreach ($data as $entry) {
+    $barHeight = 2 * intval($entry['Дата']); // Висота стовпця на основі "Дата"
+    $barY = $chartY - $barHeight;
+    $barColor = "blue"; // Колір стовпця (в даному випадку, синій)
+
+    echo "<rect x=\"$barX\" y=\"$barY\" width=\"$barWidth\" height=\"$barHeight\" fill=\"$barColor\" />";
+    $barX += $barWidth + $barSpacing;
+}
+
+echo '</svg>';
+?>

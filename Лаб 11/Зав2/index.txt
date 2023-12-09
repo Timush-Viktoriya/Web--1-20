@@ -1,0 +1,33 @@
+2.На основі лабораторної роботи №8 зробіть програму, яка зберігає дані про книги в таблицю MySQL та виводить їх у табличному вигляді
+
+<?php
+include('config.php');
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $title = $_POST['title'];
+    $author = $_POST['author'];
+    $year = $_POST['year'];
+
+    $query = "INSERT INTO books (title, author, year) VALUES (?, ?, ?)";
+    $statement = $mysqli->prepare($query);
+    $statement->bind_param('sss', $title, $author, $year);
+    $statement->execute();
+    $statement->close();
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Додати книгу</title>
+</head>
+<body>
+    <h1>Додати нову книгу</h1>
+    <form method="post">
+        Назва: <input type="text" name="title"><br>
+        Автор: <input type="text" name="author"><br>
+        Рік видання: <input type="text" name="year"><br>
+        <input type="submit" value="Зберегти">
+    </form>
+</body>
+</html>

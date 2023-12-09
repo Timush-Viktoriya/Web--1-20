@@ -1,0 +1,33 @@
+<?php
+include 'core/connection.php';
+include 'core/Model.php';
+include 'Controller/BaseController.php';
+include 'Controller/UserController.php';
+include 'Controller/GroupController.php';
+include 'core/Router.php'; // Оновлений шлях до Router.php
+
+// Автозавантажувач класів
+spl_autoload_register(function ($class_name) {
+    include 'Controller/' . $class_name . '.php';
+});
+
+$pdo = new PDO("mysql:host=$host;dbname=$database;charset=utf8", $user, $password);
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+// Створення екземпляра класу Router
+$router = new Router();
+
+// Додавання маршрутів
+$router->addRoute('GET', '/', 'UserController@index');
+$router->addRoute('GET', '/users/{id}', 'UserController@show');
+$router->addRoute('GET', '/groups', 'GroupController@index');
+$router->addRoute('GET', '/groups/{id}', 'GroupController@show');
+$router->addRoute('GET', '/groups/{id}/edit', 'GroupController@edit');
+$router->addRoute('POST', '/groups/{id}/update', 'GroupController@update');
+$router->addRoute('POST', '/groups/{id}/delete', 'GroupController@delete');
+$router->addRoute('GET', '/groups/create', 'GroupController@create');
+$router->addRoute('POST', '/groups/store', 'GroupController@store');
+
+// Обробка запиту за допомогою Router
+$router->handleRequest();
+?>

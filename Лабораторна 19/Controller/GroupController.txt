@@ -1,0 +1,65 @@
+<?php
+
+class BaseController
+{
+    protected $pdo;
+
+    public function __construct(PDO $pdo)
+    {
+        $this->pdo = $pdo;
+    }
+
+    protected function renderTable($items, $columns)
+    {
+        echo "<table border='1'>";
+        echo "<tr>";
+        foreach ($columns as $column) {
+            echo "<th>$column</th>";
+        }
+        echo "</tr>";
+
+        foreach ($items as $item) {
+            echo "<tr>";
+            foreach ($columns as $column) {
+                echo "<td>" . $item->columns->$column . "</td>";
+            }
+            echo "</tr>";
+        }
+
+        echo "</table>";
+    }
+
+    protected function renderForm($action, $fields)
+    {
+        ?>
+        <form action="<?php echo $action; ?>" method="post">
+            <?php foreach ($fields as $field): ?>
+                <div>
+                    <?php echo $field['label']; ?> <input type="<?php echo $field['type']; ?>" name="<?php echo $field['name']; ?>">
+                </div>
+            <?php endforeach; ?>
+            <div>
+                <button type="submit">Зберегти</button>
+            </div>
+        </form>
+        <?php
+    }
+
+    protected function renderCreateEditForm($action, $fields, $data = [])
+    {
+        ?>
+        <h1><?php echo $data ? 'Редагування' : 'Створення'; ?></h1>
+        <form action="<?php echo $action; ?>" method="post">
+            <?php foreach ($fields as $field): ?>
+                <div>
+                    <?php echo $field['label']; ?> <input type="<?php echo $field['type']; ?>" name="<?php echo $field['name']; ?>" value="<?php echo $data ? $data[$field['name']] : ''; ?>">
+                </div>
+            <?php endforeach; ?>
+            <div>
+                <button type="submit">Зберегти</button>
+            </div>
+        </form>
+        <?php
+    }
+}
+?>

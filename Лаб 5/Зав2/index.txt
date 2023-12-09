@@ -1,0 +1,30 @@
+2.Виконати завдання самостійно:
+Створити форму зворотнього зв'язку, де вказати ім'я, почту та текст повідомлення. Вивести дані отримані із форми.
+Додати до форми поле завантаження файлу. Вивести на екран основні параметри файлу, отримані із глобальної змінної $_FILES.
+Cтворити механізм перевірки правильності вводу даних у формі.
+Обробити можливі помилки та попередження.
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+<h3>Форма зворотнього зв'язку</h3>
+<form action="process_form.php" method="POST" enctype="multipart/form-data">
+    <label for="name">Ім'я:</label>
+    <input type="text" name="name" id="name" required><br><br>
+
+    <label for="email">Email:</label>
+    <input type="email" name="email" id="email" required><br><br>
+
+    <label for="message">Повідомлення:</label><br>
+    <textarea name="message" id="message" rows="4" required></textarea><br><br>
+
+    <label for="file">Виберіть файл:</label>
+    <input type="file" name="file" id="file"><br><br>
+
+    <input type="submit" value="Надіслати">
+</form>
+</body>
+</html>

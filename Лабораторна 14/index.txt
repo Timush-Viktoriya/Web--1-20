@@ -1,0 +1,99 @@
+<?php
+session_start();
+
+include 'config.php';
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$database;charset=utf8", $user, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Error connecting to the database: " . $e->getMessage());
+}
+
+// Функція для виведення списку книг
+function displayBooks($pdo) {
+    $result = $pdo->query("SELECT * FROM books_catalog");
+
+    echo "<h2>List of books in the library:</h2>";
+    echo "<table>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Genre</th>
+                <th>Publication Year</th>
+                <th>Actions</th>
+            </tr>";
+
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        echo "<tr>
+                <td>{$row['id']}</td>
+                <td>{$row['title']}</td>
+                <td>{$row['author']}</td>
+                <td>{$row['genre']}</td>
+                <td>{$row['publication_year']}</td>
+                <td>
+                    <a href='edit_book.php?id={$row['id']}'>Edit</a>
+                    <a href='delete_book.php?id={$row['id']}'>Delete</a>
+                </td>
+            </tr>";
+    }
+
+    echo "</table>";
+}
+
+// Додавання нової книги
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["add_book"])) {
+    $newTitle = $_POST["new_title"];
+    $newAuthor = $_POST["new_author"];
+    $newGenre = $_POST["new_genre"];
+    $newYear = $_POST["new_publication_year"];
+
+    try {
+        $stmt = $pdo->prepare("INSERT INTO books_catalog (title, author, genre, publication_year) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$newTitle, $newAuthor, $newGenre, $newYear]);
+        
+        // Повернутися до головної сторінки після додавання
+        header("Location: index.php");
+        exit();
+    } catch (PDOException $e) {
+        echo "Error adding book: " . $e->getMessage();
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Catalog</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<?php
+// Вивести список книг
+displayBooks($pdo);
+?>
+
+<!-- Форма для додавання нової книги -->
+<h2>Add a New Book</h2>
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+    <label>Title:</label>
+    <input type="text" name="new_title" required><br>
+
+    <label>Author:</label>
+    <input type="text" name="new_author" required><br>
+
+    <label>Genre:</label>
+    <input type="text" name="new_genre" required><br>
+
+    <label>Publication Year:</label>
+    <input type="number" name="new_publication_year" required><br>
+
+    <input type="submit" name="add_book" value="Add Book">
+</form>
+
+</body>
+</html>

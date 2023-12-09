@@ -1,0 +1,68 @@
+3.За допомогою функцій json_encode(), json_decode() та file_get_contents() виконайте попереднє завдання, змінивши формат збереження даних з XML на JSON.
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+<?php
+$filename = 'book.json';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = [
+        "title" => $_POST['title'],
+        "author" => $_POST['author'],
+        "genre" => $_POST['genre'],
+        "published_year" => $_POST['published_year']
+    ];
+
+    $jsonData = json_encode($data, JSON_PRETTY_PRINT);
+    if (file_put_contents($filename, $jsonData)) {
+        echo "Дані збережено у файлі book.json.";
+    } else {
+        echo "Помилка збереження даних.";
+    }
+}
+
+if (file_exists($filename)) {
+    $jsonContent = file_get_contents($filename);
+    $data = json_decode($jsonContent, true);
+
+    if ($data) {
+        echo "<h1>Інформація про книгу</h1>";
+        echo "<table border='1'>";
+        echo "<tr><th>Назва</th><th>Автор</th><th>Жанр</th><th>Рік видання</th></tr>";
+        echo "<tr>";
+        echo "<td>{$data['title']}</td>";
+        echo "<td>{$data['author']}</td>";
+        echo "<td>{$data['genre']}</td>";
+        echo "<td>{$data['published_year']}</td>";
+        echo "</tr>";
+        echo "</table>";
+    } else {
+        echo "Помилка розкодування JSON.";
+    }
+} else {
+    echo "Файл '$filename' не існує.";
+}
+?>
+
+<h1>Редагування інформації про книгу</h1>
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+    <label for="title">Назва:</label>
+    <input type="text" name="title" id="title"><br>
+
+    <label for="author">Автор:</label>
+    <input type="text" name="author" id="author"><br>
+
+    <label for="genre">Жанр:</label>
+    <input type="text" name="genre" id="genre"><br>
+
+    <label for="published_year">Рік видання:</label>
+    <input type="text" name="published_year" id="published_year"><br>
+
+    <input type="submit" value="Зберегти дані">
+</form>
+</body>
+</html>

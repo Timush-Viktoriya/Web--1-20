@@ -1,0 +1,7 @@
+<?php
+// Дані для підключення до бази даних
+$host = "localhost";
+$user = "root";
+$password = "";
+$database = "library";
+?>

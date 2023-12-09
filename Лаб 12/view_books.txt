@@ -1,0 +1,41 @@
+<?php
+include('config.php');
+
+// Перевірка авторизації користувача
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$query = "SELECT * FROM books";
+$stmt = $pdo->query($query);
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Список книг</title>
+</head>
+<body>
+    <h1>Список книг</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Назва</th>
+            <th>Автор</th>
+            <th>Рік видання</th>
+        </tr>
+        <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) { ?>
+            <tr>
+                <td><?php echo $row['id']; ?></td>
+                <td><?php echo $row['title']; ?></td>
+                <td><?php echo $row['author']; ?></td>
+                <td><?php echo $row['year']; ?></td>
+            </tr>
+        <?php } ?>
+    </table>
+    <br>
+    <a href="logout.php">Вийти</a>
+</body>
+</html>

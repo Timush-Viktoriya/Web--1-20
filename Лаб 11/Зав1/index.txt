@@ -1,0 +1,68 @@
+1.З частин коду зберіть повний сценарій
+
+<?php
+// Підключаємо файл конфігурації
+require_once('config.php');
+
+// Вибір (SELECT) результуючого ряду у вигляді асоціативного масиву
+$results = $mysqli->query("SELECT id, product_code, product_name, product_desc, price FROM products");
+
+print '<h2>SELECT результуючого ряду у вигляді асоціативного масиву</h2>';
+print '<table border="1">';
+while ($row = $results->fetch_assoc()) {
+    print '<tr>';
+    print '<td>' . $row["id"] . '</td>';
+    print '<td>' . $row["product_code"] . '</td>';
+    print '<td>' . $row["product_name"] . '</td>';
+    print '<td>' . $row["product_desc"] . '</td>';
+    print '<td>' . $row["price"] . '</td>';
+    print '</tr>';
+}
+print '</table';
+
+$results->free();
+
+// Вибір (SELECT) результуючого ряду у вигляді масиву
+$results = $mysqli->query("SELECT id, product_code, product_name, product_desc, price FROM products");
+
+print '<h2>SELECT результуючого ряду у вигляді масиву</h2>';
+print '<table border="1">';
+while ($row = $results->fetch_array()) {
+    print '<tr>';
+    print '<td>' . $row[0] . '</td>';
+    print '<td>' . $row[1] . '</td>';
+    print '<td>' . $row[2] . '</td>';
+    print '<td>' . $row[3] . '</td>';
+    print '<td>' . $row[4] . '</td>';
+    print '</tr>';
+}
+print '</table';
+
+$results->free();
+
+// Вибір (SELECT) результуючого ряду у вигляді об'єкта
+$results = $mysqli->query("SELECT id, product_code, product_name, product_desc, price FROM products");
+
+print '<h2>SELECT результуючого ряду у вигляді об\'єкта</h2>';
+print '<table border="1">';
+while ($row = $results->fetch_object()) {
+    print '<tr>';
+    print '<td>' . $row->id . '</td>';
+    print '<td>' . $row->product_code . '</td>';
+    print '<td>' . $row->product_name . '</td>';
+    print '<td>' . $row->product_desc . '</td>';
+    print '<td>' . $row->price . '</td>';
+    print '</tr>';
+}
+print '</table';
+
+$results->free();
+
+// Вибір (SELECT) одиночного значення
+$product_name = $mysqli->query("SELECT product_name FROM products WHERE id = 1")->fetch_object()->product_name;
+print '<h2>SELECT одиночного значення</h2>';
+print 'Product Name: ' . $product_name;
+
+// Закриваємо з'єднання
+$mysqli->close();
+?>

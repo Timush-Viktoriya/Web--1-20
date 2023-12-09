@@ -1,0 +1,36 @@
+1.За допомогою функцій file_get_contents() та json_decode() прочитайте зміст файла, виведіть його на екран у структурованому вигляді (таблиця або HTML-перелік).
+Додайте до цих даних ще один запис, та оновіть дані у файлі.
+
+<?php
+$filename = 'data.json'; // Замініть на ім'я вашого JSON-файлу
+
+// Отримуємо JSON-дані з файла
+$jsonData = file_get_contents($filename);
+
+if ($jsonData === false) {
+    echo "Помилка читання файлу.";
+} else {
+    // Розкодуємо JSON-дані
+    $data = json_decode($jsonData, true); // true вказує, що дані повинні бути асоціативним масивом
+
+    if ($data === null) {
+        echo "Помилка розкодування JSON.";
+    } else {
+        // Виводимо дані у вигляді HTML-переліку
+        echo "<ul>";
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                echo "<li>$key:</li>";
+                echo "<ul>";
+                foreach ($value as $subKey => $subValue) {
+                    echo "<li>$subKey: $subValue</li>";
+                }
+                echo "</ul>";
+            } else {
+                echo "<li>$key: $value</li>";
+            }
+        }
+        echo "</ul>";
+    }
+}
+?>

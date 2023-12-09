@@ -1,0 +1,87 @@
+<?php
+session_start();
+
+include 'config.php';
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$database;charset=utf8", $user, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Error connecting to the database: " . $e->getMessage());
+}
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["id"])) {
+    $bookId = $_GET["id"];
+
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM books_catalog WHERE id = ?");
+        $stmt->execute([$bookId]);
+        $book = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$book) {
+            echo "Book not found.";
+            exit();
+        }
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+        exit();
+    }
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update"])) {
+    // Отримати дані з форми
+    $newTitle = $_POST["title"];
+    $newAuthor = $_POST["author"];
+    $newGenre = $_POST["genre"];
+    $newYear = $_POST["publication_year"];
+
+    try {
+        // Оновити запис у базі даних
+        $stmt = $pdo->prepare("UPDATE books_catalog SET title = ?, author = ?, genre = ?, publication_year = ? WHERE id = ?");
+        $stmt->execute([$newTitle, $newAuthor, $newGenre, $newYear, $bookId]);
+        
+        // Повернутися до головної сторінки після оновлення
+        header("Location: index.php");
+        exit();
+    } catch (PDOException $e) {
+        echo "Error updating book: " . $e->getMessage();
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Book</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>Edit Book</h2>
+
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+    <!-- Form fields for book editing -->
+    <label>Title:</label>
+    <input type="text" name="title" value="<?php echo $book['title']; ?>" required><br>
+
+    <label>Author:</label>
+    <input type="text" name="author" value="<?php echo $book['author']; ?>" required><br>
+
+    <label>Genre:</label>
+    <input type="text" name="genre" value="<?php echo $book['genre']; ?>" required><br>
+
+    <label>Publication Year:</label>
+    <input type="number" name="publication_year" value="<?php echo $book['publication_year']; ?>" required><br>
+
+    <input type="submit" name="update" value="Update">
+</form>
+
+</body>
+</html>

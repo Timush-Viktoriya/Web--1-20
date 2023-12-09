@@ -1,0 +1,19 @@
+<?php
+
+class UserController extends BaseController
+{
+    public function index()
+    {
+        $users = User::all($this->pdo);
+        $columns = ['id', 'username', 'email'];
+        $this->renderTable($users, $columns);
+    }
+
+    public function show($id)
+    {
+        $user = User::find($this->pdo, $id);
+        $columns = ['id', 'username', 'email'];
+        $this->renderTable([$user], $columns);
+    }
+}
+?>

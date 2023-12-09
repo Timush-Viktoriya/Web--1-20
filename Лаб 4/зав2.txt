@@ -1,0 +1,99 @@
+2. Створити двовимірний асоціативний масив, що описує товари магазину. Вивести перелік товарів у таблицю
+  *Створити функцію, яка друкує товари в алфавітному порядку
+  *Створити функцію, яка друкує товари в зазначеному діапазоні цін. Додати можливість передачі параметрів меж ціни через адресний рядок.
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <h1>Тестова сторінка. ЛР4</h1>
+    <h2>Товари магазину</h2>
+    <?php
+    // Створення двовимірного асоціативного масиву з описом товарів
+    $products = array(
+        array(
+            "назва" => "Смартфон",
+            "ціна" => 5000,
+            "наявність" => true
+        ),
+        array(
+            "назва" => "Ноутбук",
+            "ціна" => 15000,
+            "наявність" => false
+        ),
+        array(
+            "назва" => "Планшет",
+            "ціна" => 3000,
+            "наявність" => true
+        ),
+        array(
+            "назва" => "Телевізор",
+            "ціна" => 8000,
+            "наявність" => true
+        ),
+        array(
+            "назва" => "Мишка",
+            "ціна" => 200,
+            "наявність" => true
+        ),
+    );
+
+    // Функція для виведення товарів у таблицю
+    function displayProducts($products) {
+        echo "<table border='1'>";
+        echo "<tr>";
+        echo "<th>Назва</th>";
+        echo "<th>Ціна</th>";
+        echo "<th>Наявність</th>";
+        echo "</tr>";
+        foreach ($products as $product) {
+            echo "<tr>";
+            echo "<td>" . $product["назва"] . "</td>";
+            echo "<td>" . $product["ціна"] . "</td>";
+            echo "<td>" . ($product["наявність"] ? "Так" : "Ні") . "</td>";
+            echo "</tr>";
+        }
+        echo "</table>";
+    }
+
+    // Виклик функції для виведення товарів у таблицю
+    displayProducts($products);
+
+    // Функція для сортування товарів за назвою (алфавітний порядок)
+    function sortProductsByName($products) {
+        usort($products, function ($a, $b) {
+            return strcmp($a["назва"], $b["назва"]);
+        });
+        displayProducts($products);
+    }
+
+    // Виклик функції для сортування товарів за назвою
+    echo "<h2>Сортування за назвою (алфавітний порядок):</h2>";
+    sortProductsByName($products);
+
+    // Функція для фільтрації товарів за ціною
+    function filterProductsByPrice($products, $minPrice, $maxPrice) {
+        $filteredProducts = array_filter($products, function ($product) use ($minPrice, $maxPrice) {
+            return $product["ціна"] >= $minPrice && $product["ціна"] <= $maxPrice;
+        });
+        displayProducts($filteredProducts);
+    }
+
+    // Виклик функції для фільтрації товарів за ціною (параметри меж ціни передаються через адресний рядок)
+    if (isset($_GET['minPrice']) && isset($_GET['maxPrice'])) {
+        $minPrice = $_GET['minPrice'];
+        $maxPrice = $_GET['maxPrice'];
+        echo "<h2>Фільтрація за ціною (від $minPrice до $maxPrice):</h2>";
+        filterProductsByPrice($products, $minPrice, $maxPrice);
+    }
+    ?>
+    </table>
+    <time>
+        <?php
+        echo date("Y-m-d H:i:s");
+        ?>
+    </time>
+</body>
+</html>

@@ -1,0 +1,41 @@
+2.Створіть сценарій, який за допомогою функцій дати та часу визначає: - поточну дату - поточний час - день тижня - день тижня вивести українською мовою (використати оператор switch - csse)
+
+<?php
+// Отримуємо поточну дату та час
+$currentDate = date('Y-m-d');
+$currentTime = date('H:i:s');
+
+// Отримуємо день тижня (як число, де 1 - понеділок, 7 - неділя)
+$dayOfWeek = date('N');
+
+
+$dayOfWeekUkrainian = '';
+switch ($dayOfWeek) {
+    case 1:
+        $dayOfWeekUkrainian = 'понеділок';
+        break;
+    case 2:
+        $dayOfWeekUkrainian = 'вівторок';
+        break;
+    case 3:
+        $dayOfWeekUkrainian = 'середа';
+        break;
+    case 4:
+        $dayOfWeekUkrainian = 'четвер';
+        break;
+    case 5:
+        $dayOfWeekUkrainian = 'п`ятниця';
+        break;
+    case 6:
+        $dayOfWeekUkrainian = 'субота';
+        break;
+    case 7:
+        $dayOfWeekUkrainian = 'неділя';
+        break;
+}
+
+// Виводимо інформацію
+echo "Поточна дата: $currentDate<br>";
+echo "Поточний час: $currentTime<br>";
+echo "День тижня (українською): $dayOfWeekUkrainian<br>";
+?>

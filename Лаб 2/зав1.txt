@@ -1,0 +1,13 @@
+1.Створити самостійно CGI-сценарій на Python, який виводить числа від 1 до 10 
+#!/usr/bin/env python
+
+print("Content-type: text/html\n")
+print("<html><head><title>Числа від 1 до 10</title></head><body>")
+print("<h1>Числа від 1 до 10:</h1>")
+print("<ul>")
+
+for number in range(1, 11):
+    print(f"<li>{number}</li>")
+
+print("</ul>")
+print("</body></html>")

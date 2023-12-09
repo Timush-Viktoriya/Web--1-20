@@ -1,0 +1,42 @@
+<?php
+include('config.php');
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $title = $_POST['title'];
+    $author = $_POST['author'];
+    $year = $_POST['year'];
+
+    $query = "INSERT INTO books (title, author, year) VALUES (:title, :author, :year)";
+    $statement = $pdo->prepare($query);
+    $statement->bindParam(':title', $title);
+    $statement->bindParam(':author', $author);
+    $statement->bindParam(':year', $year);
+    $statement->execute();
+}
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Додати книгу</title>
+</head>
+<body>
+    <h1>Додати нову книгу</h1>
+    <form method="post">
+        Назва: <input type="text" name="title"><br>
+        Автор: <input type="text" name="author"><br>
+        Рік видання: <input type="text" name="year"><br>
+        <input type="submit" value="Зберегти">
+    </form>
+    <br>
+    <a href="logout.php">Вийти</a>
+</body>
+</html>

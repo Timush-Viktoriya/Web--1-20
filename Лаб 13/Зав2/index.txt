@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Page Scraper</title>
+    
+    <!-- Підключення стилів -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .weather-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .weather-icon {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+
+<?php
+include "WebPageScraper.php";
+
+// Використання класу для отримання та обробки сторінки
+$url = 'https://weather.com/';
+$scraper = new WebPageScraper($url);
+$scraper->loadPage();
+
+// Отримання та виведення елементів з класом "CurrentConditions--columns--30npQ"
+$currentWeatherClass = 'CurrentConditions--columns--30npQ';
+$currentWeatherElements = $scraper->findElementsByClass($currentWeatherClass);
+
+echo "<h2>Current Weather:</h2>";
+
+// Виведення погоди та графічного позначення
+echo "<div class='weather-container'>";
+echo $scraper->getDOM()->saveHTML($currentWeatherElements[0]) . "\n";
+echo "<img src='H:\1\wet.png'  class='weather-icon'>";
+echo "</div>";
+?>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+2.Створіть сценарій з наступними функціями:
+сценарій виводить користувачеві форму вводу із можливістю завантаження текстових файлів
+текстові файли, які були завантажені зберігаються у директорії texts
+у я кості параметру сценарію можна передати ім'я збереженого файлу і сценарій повинен вивести зміст файлу
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
+    $uploadDir = 'texts/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true); // Створюємо директорію, якщо її немає
+    }
+
+    $uploadedFile = $_FILES['file'];
+
+    if ($uploadedFile['error'] === UPLOAD_ERR_OK) {
+        $fileName = $uploadedFile['name'];
+        $fileType = $uploadedFile['type'];
+        $fileSize = $uploadedFile['size'];
+        $fileTmpName = $uploadedFile['tmp_name'];
+
+        $destination = $uploadDir . $fileName;
+
+        if (move_uploaded_file($fileTmpName, $destination)) {
+            echo "Файл '$fileName' успішно завантажений.<br>";
+
+            $fileContent = file_get_contents($destination);
+            echo "<h3>Зміст файлу '$fileName':</h3>";
+            echo "<pre>" . htmlspecialchars($fileContent) . "</pre>";
+        } else {
+            echo "Помилка при завантаженні файлу.";
+        }
+    } else {
+        echo "Помилка при завантаженні файлу. Код помилки: {$uploadedFile['error']}";
+    }
+} else {
+    echo "Будь ласка, виберіть файл для завантаження.";
+}
+?>
+</body>
+</html>

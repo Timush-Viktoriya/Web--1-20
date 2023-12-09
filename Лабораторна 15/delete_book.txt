@@ -1,0 +1,32 @@
+<?php
+session_start();
+
+include 'config.php';
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$database;charset=utf8", $user, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Error connecting to the database: " . $e->getMessage());
+}
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["id"])) {
+    $bookId = $_GET["id"];
+
+    try {
+        $stmt = $pdo->prepare("DELETE FROM books_catalog WHERE id = ?");
+        $stmt->execute([$bookId]);
+
+        // Повернутися до головної сторінки після видалення
+        header("Location: index.php");
+        exit();
+    } catch (PDOException $e) {
+        echo "Error deleting book: " . $e->getMessage();
+    }
+}
+?>

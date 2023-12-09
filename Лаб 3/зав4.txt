@@ -1,0 +1,43 @@
+4.Створіть функцію, яка буде друкувати у табличному вигляді переданий їй масив. Застосуйте цю функцію для виконання завдання1
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <h1>Тестова сторінка. ЛР3</h1>
+
+    <?php
+    // Функція для виведення масиву в табличному вигляді
+    function printTableFromArray($array) {
+        echo '<table>';
+        echo '<thead>';
+        echo '<tr>';
+        for ($i = 0; $i < count($array); $i++) {
+            echo '<th>col ' . ($i + 1) . '</th>';
+        }
+        echo '</tr>';
+        echo '</thead>';
+        echo '<tbody>';
+        echo '<tr>';
+        foreach ($array as $item) {
+            echo '<td>' . $item . '</td>';
+        }
+        echo '</tr>';
+        echo '</tbody>';
+        echo '</table>';
+    }
+
+    $arNumbers = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
+
+    // Викликаємо функцію для виведення масиву
+    printTableFromArray($arNumbers);
+    ?>
+
+    <time>
+        <?= date("Y-m-d H:i:s") ?>
+    </time>
+</body>
+</html>

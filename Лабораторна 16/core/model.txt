@@ -1,0 +1,81 @@
+<?php
+class Model
+{
+    protected static $pdo = null;
+    protected static $table = null;
+
+    public $columns = null;
+
+    public function __construct(PDO $pdo, $table, $data = null)
+    {
+        self::$pdo = $pdo;
+        if (!self::$table)
+            self::$table = $table;
+        $this->columns = (object) [];
+
+        $sql = "SHOW COLUMNS FROM " . self::$table;
+        $stmt = self::$pdo->query($sql);
+
+        $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($columns as $column) {
+            $fn = $column['Field'];
+            $this->columns->$fn = null;
+        }
+        if ($data) {
+            foreach ($data as $key => $value) {
+                $this->$key = $value;
+            }
+        }
+    }
+
+    protected static function createInstance($table)
+    {
+        return new static(self::$pdo, $table);
+    }
+
+    public static function all($table = null)
+    {
+        if (!self::$pdo) {
+            return null;
+        }
+
+        if (!self::$table) {
+            self::$table = $table;
+        }
+
+        $sql = "SELECT * FROM " . self::$table;
+        $stmt = self::$pdo->query($sql);
+
+        if ($stmt) {
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $models = [];
+            foreach ($rows as $row) {
+                $model = static::createInstance(self::$table);
+                foreach ($row as $key => $value) {
+                    $model->columns->$key = $value;
+                }
+                $models[] = $model;
+            }
+            return $models;
+        } else {
+            return null;
+        }
+    }
+
+    public function insert($data)
+    {
+        $columns = implode(', ', array_keys($data));
+        $values = ':' . implode(', :', array_keys($data));
+
+        $sql = "INSERT INTO " . self::$table . " ($columns) VALUES ($values)";
+        $stmt = self::$pdo->prepare($sql);
+        foreach ($data as $key => $value) {
+            $stmt->bindValue(':' . $key, $value);
+        }
+
+        return $stmt->execute();
+    }
+
+    // ... (other methods remain unchanged)
+}

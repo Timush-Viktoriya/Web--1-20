@@ -1,0 +1,95 @@
+3.Створити дві двовимірні матриці 10х10, заповнити їх довільними значеннями від 0 до 100.
+  *Виконати додавання матриць, створити для цього функцію
+  *Виконати віднімання матриць, створити для цього функцію
+  *Вивести в табличній формі початкові матриці та результат додавання та віднімання
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <h1>Тестова сторінка. ЛР4</h1>
+    <h2>Операції з двома матрицями</h2>
+    
+    <?php
+    // Функція для створення та заповнення двовимірної матриці розміром 10x10
+    function createMatrix($rows, $columns) {
+        $matrix = array();
+        for ($i = 0; $i < $rows; $i++) {
+            $row = array();
+            for ($j = 0; $j < $columns; $j++) {
+                $row[] = mt_rand(0, 100);
+            }
+            $matrix[] = $row;
+        }
+        return $matrix;
+    }
+
+    // Функція для виведення матриці в табличній формі
+    function displayMatrix($matrix) {
+        echo "<table border='1'>";
+        foreach ($matrix as $row) {
+            echo "<tr>";
+            foreach ($row as $value) {
+                echo "<td>" . $value . "</td>";
+            }
+            echo "</tr>";
+        }
+        echo "</table>";
+    }
+
+    // Створення двох матриць 10x10
+    $matrixA = createMatrix(10, 10);
+    $matrixB = createMatrix(10, 10);
+
+    // Функція для додавання матриць
+    function addMatrices($matrixA, $matrixB) {
+        $result = array();
+        for ($i = 0; $i < count($matrixA); $i++) {
+            $row = array();
+            for ($j = 0; $j < count($matrixA[0]); $j++) {
+                $row[] = $matrixA[$i][$j] + $matrixB[$i][$j];
+            }
+            $result[] = $row;
+        }
+        return $result;
+    }
+
+    // Функція для віднімання матриць
+    function subtractMatrices($matrixA, $matrixB) {
+        $result = array();
+        for ($i = 0; $i < count($matrixA); $i++) {
+            $row = array();
+            for ($j = 0; $j < count($matrixA[0]); $j++) {
+                $row[] = $matrixA[$i][$j] - $matrixB[$i][$j];
+            }
+            $result[] = $row;
+        }
+        return $result;
+    }
+
+    // Виведення матриць та результатів додавання та віднімання
+    echo "<h3>Матриця A:</h3>";
+    displayMatrix($matrixA);
+
+    echo "<h3>Матриця B:</h3>";
+    displayMatrix($matrixB);
+
+    echo "<h3>Результат додавання матриць:</h3>";
+    $sumMatrix = addMatrices($matrixA, $matrixB);
+    displayMatrix($sumMatrix);
+
+    echo "<h3>Результат віднімання матриць:</h3>";
+    $differenceMatrix = subtractMatrices($matrixA, $matrixB);
+    displayMatrix($differenceMatrix);
+    ?>
+
+    <time>
+        <?php
+        echo date("Y-m-d H:i:s");
+        ?>
+    </time>
+</body>
+</html>

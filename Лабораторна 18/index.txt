@@ -1,0 +1,23 @@
+<?php
+
+include 'core/connection.php';
+include 'core/Model.php';
+include 'Controller/BaseController.php';
+include 'Controller/UserController.php';
+include 'Controller/GroupController.php';
+
+// Автозавантажувач класів
+spl_autoload_register(function ($class_name) {
+    include 'Controller/' . $class_name . '.php';
+});
+
+$pdo = new PDO("mysql:host=$host;dbname=$database;charset=utf8", $user, $password);
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+// Приклад виклику методів у контролерах
+$userController = new UserController($pdo);
+$userController->index();
+
+$groupController = new GroupController($pdo);
+$groupController->index();
+?>

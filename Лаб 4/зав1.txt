@@ -1,0 +1,65 @@
+1.Модифікувати останню програму, таким чином, щоб дані з масиву було виведено в таблицю. Використати для цього цикл foreach():
+   *Створити функцію, аргументом якої є масив, функція має виводити дані в таблицю на сторінці
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <h1>Тестова сторінка. ЛР4</h1>
+    <h2>Багатовимірні масиви</h2>
+    <table>
+        <tr>
+            <th>Ім'я</th>
+            <th>Прізвище</th>
+            <th>Вік</th>
+            <th>Студент</th>
+        </tr>
+        <?php
+        $arPeople = array();
+        $arPerson = array(
+            "name" => "Ivan",
+            "surname" => "Kostenko",
+            "age" => 20,
+            "student" => true
+        );
+        $arPeople[] = $arPerson;
+        $arPerson = array(
+            "name" => "Ruslan",
+            "surname" => "Kostenko",
+            "age" => 12,
+            "student" => false
+        );
+        $arPeople[] = $arPerson;
+        $arPerson = array(
+            "name" => "Petro",
+            "surname" => "Ilchenko",
+            "age" => 18,
+            "student" => true
+        );
+        $arPeople[] = $arPerson;
+
+        // Визначення функції для виведення масиву в таблицю
+        function displayArrayAsTable($array) {
+            foreach ($array as $person) {
+                echo "<tr>";
+                echo "<td>" . $person["name"] . "</td>";
+                echo "<td>" . $person["surname"] . "</td>";
+                echo "<td>" . $person["age"] . "</td>";
+                echo "<td>" . ($person["student"] ? "Так" : "Ні") . "</td>";
+                echo "</tr>";
+            }
+        }
+
+        // Виклик функції з передачею масиву як аргументу
+        displayArrayAsTable($arPeople);
+        ?>
+    </table>
+    <time>
+        <?php
+        echo date("Y-m-d H:i:s");
+        ?>
+    </time>
+</body>
+</html>
