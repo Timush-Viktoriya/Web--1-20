@@ -1,0 +1,34 @@
+<?php
+
+class GroupController extends BaseController
+{
+    public function create()
+    {
+        $this->renderCreateEditForm('/groups/store', [
+            ['label' => 'Назва', 'type' => 'text', 'name' => 'title'],
+            ['label' => 'Рік', 'type' => 'text', 'name' => 'year'],
+        ]);
+    }
+
+    public function index()
+    {
+        $groups = Group::all($this->pdo);
+        $this->renderView('groups_index.php', ['groups' => $groups]);
+    }
+
+    public function show($id)
+    {
+        $group = Group::find($this->pdo, $id);
+        $this->renderView('group_show.php', ['group' => $group]);
+    }
+
+    public function store()
+    {
+        // Handle storing data...
+
+        // Assuming there is a redirect after storing data
+        header("Location: /groups");
+        exit();
+    }
+}
+?>
